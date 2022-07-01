@@ -11,21 +11,27 @@ function App() {
       setTimeout(() => {
         console.log("api");
         api();
-      }, res.count - 1 * 1000);
+      }, (res.count - 1) * 1000);
     }
   }, [res]);
   function api() {
     fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => {
-        if (res.status === 200) {
-          setRes({ count: res.count + 1, res: res.status });
-        } else {
-          setRes({ res: res.status });
+      .then((response) => {
+        setRes({ count: res.count + 1, status: response.status });
+        if (response.ok) {
+          return response.json();
         }
-        res.json();
+
+        throw new Error("error");
       })
-      .then((data) => setData(data));
+
+      .then((data) => {
+        console.log("line29", data, "count", res.count);
+        setData([...data]);
+      })
+      .catch((error) => console.log(error.message));
   }
+  console.log("lin31", data);
   return <div className="App"></div>;
 }
 
