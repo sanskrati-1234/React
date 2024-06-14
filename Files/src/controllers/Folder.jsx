@@ -1,26 +1,26 @@
 import { useState } from "react";
 
-export const Folder = ({ tree }) => {
-  const [expand, setExpand] = useState(false);
-  if (!tree?.isFolder) {
+function Folder({ explore }) {
+  const [show, setShow] = useState(false);
+
+  if (!explore.isFolder) {
     return (
-      <>
-        <div>{tree.name}</div>
-      </>
+      <div className="file">
+        <div>{explore.name}</div>
+      </div>
     );
   }
 
   return (
-    <>
-      <span onClick={() => setExpand(!expand)}>
-        -{tree.name}
-        <br />
-      </span>
-      <div style={{ display: expand ? "block" : "none", padding: "5px" }}>
-        {tree.items.map((node) => {
-          return <Folder tree={node} />;
+    <div className="folder">
+      <div onClick={() => setShow(!show)}> {explore.name}</div>
+      <div style={{ display: show ? "block" : "none" }}>
+        {explore.items.map((item) => {
+          return <Folder explore={item} />;
         })}
       </div>
-    </>
+    </div>
   );
-};
+}
+
+export default Folder;
