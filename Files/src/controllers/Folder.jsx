@@ -1,12 +1,10 @@
 import { useState } from "react";
 
-function Folder({ explore, setData }) {
+function Folder({ explore, insertDataToTree }) {
   const [show, setShow] = useState(false);
   const [addFile, setAddFile] = useState(false);
   const [addFolder, setAddFolder] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [folder, setFolder] = useState("");
-  if (!explore.isFolder) {
+  if (explore && !explore.isFolder) {
     return (
       <div className="file">
         <div>{explore.name}</div>
@@ -15,16 +13,17 @@ function Folder({ explore, setData }) {
   }
 
   const saveFile = (e) => {
+    e.stopPropagation();
     //setFileName(e.target.value);
     if (e.keyCode === 13) {
-      explore.items.unshift({ name: e.target.value, isFolder: false });
-      setData(explore);
+      // explore.items.unshift({ name: e.target.value, isFolder: false });
+      insertDataToTree(explore.folderId, false, e.target.value);
       setAddFile(false);
     }
   };
 
   const saveFolder = (e) => {
-    setFolder(e.target.value);
+    //setFolder(e.target.value);
     if (e.keyCode === 13) {
     }
   };
@@ -40,7 +39,7 @@ function Folder({ explore, setData }) {
       </div>
       <div style={{ display: show ? "block" : "none" }}>
         {explore.items.map((item) => {
-          return <Folder explore={item} />;
+          return <Folder explore={item} insertDataToTree={insertDataToTree} />;
         })}
       </div>
     </div>
